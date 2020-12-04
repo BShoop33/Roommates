@@ -14,6 +14,8 @@ namespace Roommates
         static void Main(string[] args)
         {
             RoomRepository roomRepo = new RoomRepository(CONNECTION_STRING);
+            ChoreRepository choreRepo = new ChoreRepository(CONNECTION_STRING);
+            RoommateRepository roommateRepo = new RoommateRepository(CONNECTION_STRING);
 
             bool runProgram = true;
             while (runProgram)
@@ -60,14 +62,65 @@ namespace Roommates
                         Console.Write("Press any key to continue");
                         Console.ReadKey();
                         break;
+                    case ("Show all chores"):
+                        List<RoommateChore> chores = choreRepo.GetAll();
+                        foreach (RoommateChore c in chores)
+                        {
+                            Console.WriteLine($"{c.Id} - RoommateID:  {c.RoommateId}, ChoreId: {c.ChoreId}");
+                        }
+                        Console.Write("Press any key to continue");
+                        Console.ReadKey();
+                        break;
+                    case ("Search for a chore"):
+                        Console.Write("Chore Id: ");
+                        int ident = int.Parse(Console.ReadLine());
+
+                        RoommateChore chore = choreRepo.GetById(ident);
+
+                        Console.WriteLine($"{chore.Id} - RoommateID:  {chore.RoommateId}, ChoreId: {chore.ChoreId}");
+                        Console.Write("Press any key to continue");
+                        Console.ReadKey();
+                        break;
+                    case ("Add a chore"):
+                        Console.Write("Roommate Id: ");
+                        int roommateId = int.Parse(Console.ReadLine());
+
+                        Console.Write("Chore Id: ");
+                        int choreId = int.Parse(Console.ReadLine());
+
+                        RoommateChore choreToAdd = new RoommateChore()
+                        {
+                            RoommateId = roommateId,
+                            ChoreId = choreId
+                        };
+
+                        choreRepo.Insert(choreToAdd);
+
+                        Console.WriteLine($"{choreToAdd.RoommateId} and {choreToAdd.ChoreId} have been added and assigned an Id of {choreToAdd.Id}");
+                        Console.Write("Press any key to continue");
+                        Console.ReadKey();
+                        break;
+
+                    case ("Search for Roommate"):
+                        Console.Write("Room Id: ");
+                        int identity = int.Parse(Console.ReadLine());
+
+                        Roommate roommate = roommateRepo.GetById(identity);
+
+                        Console.WriteLine(  @$"{roommate.Id}
+                                            Roommate Name:  {roommate.Firstname} {roommate.Lastname}
+                                            Rent Portion:  {roommate.RentPortion}
+                                            Room:  {roommate.Room}");
+                        Console.Write("Press any key to continue");
+                        Console.ReadKey();
+                        break;
+
+
                     case ("Exit"):
                         runProgram = false;
                         break;
                 }
             }
-
-
-
         }
 
         static string GetMenuSelection()
@@ -75,12 +128,16 @@ namespace Roommates
             Console.Clear();
 
             List<string> options = new List<string>()
-        {
-            "Show all rooms",
-            "Search for room",
-            "Add a room",
-            "Exit"
-        };
+            {
+                "Show all rooms",
+                "Search for room",
+                "Add a room",
+                "Show all chores",
+                "Search for a chore",
+                "Add a chore",
+                "Search for Roommate",
+                "Exit"
+            };
 
             for (int i = 0; i < options.Count; i++)
             {
@@ -104,7 +161,6 @@ namespace Roommates
                     continue;
                 }
             }
-
         }
     }
 }

@@ -18,6 +18,7 @@ namespace Roommates.Repositories
         /// <summary>
         ///  Get a list of all Rooms in the database
         /// </summary>
+        
         public List<Room> GetAll()
         {
             //  We must "use" the database connection.
