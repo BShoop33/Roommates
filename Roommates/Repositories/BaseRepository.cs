@@ -17,7 +17,6 @@ namespace Roommates.Repositories
         /// </summary>
         private string _connectionString;
 
-
         /// <summary>
         ///  This constructor will be invoked by subclasses.
         ///  It will save the connection string for later use.
@@ -26,7 +25,6 @@ namespace Roommates.Repositories
         {
             _connectionString = connectionString;
         }
-
 
         /// <summary>
         ///  Represents a connection to the database.
