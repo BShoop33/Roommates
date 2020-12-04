@@ -107,10 +107,7 @@ namespace Roommates
 
                         Roommate roommate = roommateRepo.GetById(identity);
 
-                        Console.WriteLine(  @$"{roommate.Id}
-                                            Roommate Name:  {roommate.Firstname} {roommate.Lastname}
-                                            Rent Portion:  {roommate.RentPortion}
-                                            Room:  {roommate.Room}");
+                        Console.WriteLine($"{roommate.Id} \nRoommate Name:  {roommate.Firstname} {roommate.Lastname} \nRent Portion:  {roommate.RentPortion} \nRoom:  {roommate.Room.Name}");
                         Console.Write("Press any key to continue");
                         Console.ReadKey();
                         break;

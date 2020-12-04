@@ -14,37 +14,42 @@ namespace Roommates.Repositories
         public Roommate GetById(int id)
         {
             using (SqlConnection conn = Connection)
+            {
                 conn.Open();
-                using (SqlCommand cmd = Connection.CreateCommand())
+                using (SqlCommand cmd = conn.CreateCommand())
                 {
-                    cmd.CommandText = @"SELECT FirstName, LastName, RentPortoin, RoomID 
-                                        FROM Roommate
-                                        WHERE Id = @id
-                                        LEFT JOIN ROOM r ON r.Id = RoomId";
+                    cmd.CommandText = 
+                        @"\nSELECT roommate.Id, FirstName, LastName, RentPortion, RoomId, Name
+                        FROM Roommate roommate
+                        JOIN ROOM r ON r.Id = roommate.RoomId
+                        WHERE roommate.Id = @id\n";
                     cmd.Parameters.AddWithValue("@id", id);
                     SqlDataReader reader = cmd.ExecuteReader();
 
                     Roommate roommate = null;
 
-                    if(reader.Read())
+                    if (reader.Read())
                     {
                         roommate = new Roommate
                         {
-                            Id = id,
-                            Firstname = roommate.Firstname,
-                            Lastname = roommate.Lastname,
-                            RentPortion = roommate.RentPortion,
-                            Room = roommate.Room
+                            Id = reader.GetInt32(reader.GetOrdinal("Id")),
+                            Firstname = reader.GetString(reader.GetOrdinal("FirstName")),
+                            Lastname = reader.GetString(reader.GetOrdinal("LastName")),
+                            RentPortion = reader.GetInt32(reader.GetOrdinal("RentPortion")),
+                            Room = new Room()
+                            {
+                                Name = reader.GetString(reader.GetOrdinal("Name"))
+                            }
                         };
                     }
 
-                reader.Close();
+                    reader.Close();
 
-                return roommate;
-
+                    return roommate;
                 }
+
+                
+            }
         }
-
-
     }
 }
